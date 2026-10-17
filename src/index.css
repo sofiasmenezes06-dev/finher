@@ -1,0 +1,229 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * FinHer design tokens.
+ * Primary: deep emerald. Ink & dark surfaces: navy. CTA accent: coral.
+ * Text/surface pairs are chosen for WCAG AA (4.5:1+) in both modes.
+ * Chart series were validated for colour-vision deficiency separation.
+ */
+:root {
+  --radius: 0.875rem;
+
+  --background: #f7f5f1;
+  --foreground: #0b1630;
+  --card: #ffffff;
+  --card-foreground: #0b1630;
+  --popover: #ffffff;
+  --popover-foreground: #0b1630;
+
+  --primary: #0b6e57;
+  --primary-foreground: #ffffff;
+  --secondary: #ece8e1;
+  --secondary-foreground: #0b1630;
+  --muted: #efebe4;
+  --muted-foreground: #4f5a72;
+  --accent: #e9e5dd;
+  --accent-foreground: #0b1630;
+
+  --cta: #ff7a5c;
+  --cta-hover: #ff6844;
+  --cta-foreground: #0b1630;
+
+  --navy: #0b1630;
+  --navy-foreground: #eef1f6;
+
+  --success: #0a6b3f;
+  --warning: #8a5a00;
+  --destructive: #b42318;
+  --destructive-foreground: #ffffff;
+
+  --border: #e2ddd4;
+  --input: #cfc8bc;
+  --ring: #0b6e57;
+
+  --chart-1: #0b7a5e;
+  --chart-2: #eb6834;
+  --chart-grid: #ebe7e0;
+  --chart-axis: #6b7385;
+}
+
+.dark {
+  --background: #0a1222;
+  --foreground: #eef1f6;
+  --card: #111b2e;
+  --card-foreground: #eef1f6;
+  --popover: #111b2e;
+  --popover-foreground: #eef1f6;
+
+  --primary: #34c79a;
+  --primary-foreground: #06261c;
+  --secondary: #1a2740;
+  --secondary-foreground: #eef1f6;
+  --muted: #16213a;
+  --muted-foreground: #a6b1c5;
+  --accent: #1c2a44;
+  --accent-foreground: #eef1f6;
+
+  --cta: #ff8a6e;
+  --cta-hover: #ff9e86;
+  --cta-foreground: #0b1630;
+
+  --navy: #060c18;
+  --navy-foreground: #eef1f6;
+
+  --success: #4ed39a;
+  --warning: #f5b94a;
+  --destructive: #ff6b5e;
+  --destructive-foreground: #1a0503;
+
+  --border: #23314b;
+  --input: #34445f;
+  --ring: #34c79a;
+
+  --chart-1: #1fa37c;
+  --chart-2: #e8693f;
+  --chart-grid: #1f2b42;
+  --chart-axis: #8d97ab;
+}
+
+@theme inline {
+  --font-sans: "Inter", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  --font-display: "Bricolage Grotesque", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 12px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-cta: var(--cta);
+  --color-cta-hover: var(--cta-hover);
+  --color-cta-foreground: var(--cta-foreground);
+  --color-navy: var(--navy);
+  --color-navy-foreground: var(--navy-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-grid: var(--chart-grid);
+  --color-chart-axis: var(--chart-axis);
+}
+
+/*
+ * Page-level ground, ink and font are deliberately UNLAYERED: when FinHer is
+ * embedded in a host page (e.g. a shared artifact), the host's own unlayered
+ * reset would otherwise beat everything inside @layer and repaint the page.
+ */
+:root {
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+}
+:root.dark {
+  color-scheme: dark;
+}
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  :focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Long-form content rendered from /content Markdown. */
+.prose-fh {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  line-height: 1.65;
+  max-width: 68ch;
+}
+.prose-fh h2,
+.prose-fh h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.125rem;
+  margin-top: 0.5rem;
+}
+.prose-fh ul,
+.prose-fh ol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-left: 1.25rem;
+}
+.prose-fh ul {
+  list-style: disc;
+}
+.prose-fh ol {
+  list-style: decimal;
+}
+.prose-fh li::marker {
+  color: var(--primary);
+}
+.prose-fh strong {
+  font-weight: 600;
+}
+.prose-fh a {
+  color: var(--primary);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-fh a:hover {
+  text-decoration-thickness: 2px;
+}

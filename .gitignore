@@ -1,0 +1,21 @@
+# Dependencies (reinstalled with `npm install`)
+node_modules/
+
+# Build output
+dist/
+dist-artifact/
+
+# Local secrets and settings: never commit real keys
+.env
+.env.local
+.env.*.local
+
+# Local Claude app settings
+.claude/
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
