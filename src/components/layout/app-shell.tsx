@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { BookOpen, Compass, LogOut, Menu, Route, Settings, UserRound, Users, X, type LucideIcon } from "lucide-react";
+import { BookOpen, Compass, Loader2, LogOut, Menu, Route, Settings, UserRound, Users, X, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -135,7 +135,17 @@ export function AppShell() {
           </nav>
         )}
         <main id="main" className="flex-1 px-4 pb-24 pt-6 sm:px-6 lg:px-10 lg:pt-10">
-          <Outlet />
+          {/* Pages load on demand; keep the shell on screen while one arrives. */}
+          <Suspense
+            fallback={
+              <div className="grid place-items-center py-24" role="status">
+                <Loader2 className="size-8 animate-spin text-primary" aria-hidden="true" />
+                <span className="sr-only">{t.common.loading}</span>
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </div>
