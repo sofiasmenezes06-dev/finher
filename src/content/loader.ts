@@ -267,6 +267,65 @@ export function getAreaGuide(id: string) {
   return AREA_GUIDES.find((a) => a.id === id);
 }
 
+/* ---------------- Education topics (courses + cited guidance) ---------------- */
+
+export interface TopicCourse {
+  name: string;
+  provider: string;
+  url: string;
+  level: string;
+  cost: string;
+  language: string;
+  why: string;
+}
+
+export interface Topic {
+  id: string;
+  order: number;
+  title: string;
+  summary: string;
+  reviewed: string;
+  courses: TopicCourse[];
+  sources: { label: string; url: string }[];
+  sections: { heading: string; html: string }[];
+}
+
+export const TOPICS: Topic[] = files("topics")
+  .map(({ path, meta, body }) => {
+    const sources = Array.isArray(meta.sources)
+      ? (meta.sources as { label?: unknown; url?: unknown }[]).map((s) => ({ label: String(s.label ?? s.url), url: String(s.url) }))
+      : [];
+    if (sources.length === 0) console.warn(`${path}: topics need public sources`);
+    const courses = Array.isArray(meta.courses)
+      ? (meta.courses as Record<string, unknown>[])
+          .filter((c) => c.name && c.url)
+          .map((c) => ({
+            name: String(c.name),
+            provider: String(c.provider ?? ""),
+            url: String(c.url),
+            level: String(c.level ?? ""),
+            cost: String(c.cost ?? ""),
+            language: String(c.language ?? ""),
+            why: String(c.why ?? ""),
+          }))
+      : [];
+    return {
+      id: String(meta.id),
+      order: Number(meta.order ?? 99),
+      title: String(meta.title ?? meta.id),
+      summary: String(meta.summary ?? ""),
+      reviewed: dateString(meta.reviewed),
+      courses,
+      sources,
+      sections: sections(body).map((s) => ({ heading: s.heading, html: md(s.text) })),
+    };
+  })
+  .sort((a, b) => a.order - b.order);
+
+export function getTopic(id: string) {
+  return TOPICS.find((t) => t.id === id);
+}
+
 /* ---------------- Institutions (public, cited information) ---------------- */
 
 export interface Institution {

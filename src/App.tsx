@@ -12,7 +12,7 @@ import Onboarding from "@/pages/onboarding";
 import OverviewPage from "@/pages/overview";
 import SettingsPage from "@/pages/settings";
 import CommunityPage from "@/pages/community";
-import { AreaGuidePage, EducationPage } from "@/pages/education";
+import { AreaGuidePage, EducationPage, TopicPage } from "@/pages/education";
 import { FamilyPage, FamilyPhasePage } from "@/pages/family";
 import { JourneysPage, StoryPage } from "@/pages/journeys";
 import { NavigatorPage, PlaybookPage } from "@/pages/navigator";
@@ -101,6 +101,7 @@ function Chrome() {
           <Route index element={<OverviewRoute />} />
           <Route path="education" element={<EducationPage />} />
           <Route path="education/areas/:areaId" element={<AreaGuidePage />} />
+          <Route path="education/topics/:topicId" element={<TopicPage />} />
           <Route path="community" element={<CommunityPage />} />
           <Route path="journeys" element={<JourneysPage />} />
           <Route path="journeys/stories/:storyId" element={<StoryPage />} />
