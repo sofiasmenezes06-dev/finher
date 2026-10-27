@@ -1,12 +1,12 @@
 import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, BookMarked, Bot, Clock, Layers, ListChecks } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookMarked, Bot, Clock, ExternalLink, GraduationCap, Layers, ListChecks, Sparkles } from "lucide-react";
 import { Prose } from "@/components/content/blocks";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { AREA_GUIDES, getAreaGuide } from "@/content/loader";
-import { fmt, useT, type Messages } from "@/i18n";
+import { AREA_GUIDES, TOPICS, getAreaGuide, getTopic } from "@/content/loader";
+import { fmt, formatDay, useT, type Messages } from "@/i18n";
 import { isOnboarded } from "@/lib/domain";
 import { buildRecommendations, type TrailReason } from "@/lib/path-engine";
 import { useAuth } from "@/providers/auth";
@@ -77,6 +77,32 @@ export function EducationPage() {
               </li>
             ))}
           </ol>
+        </section>
+      )}
+
+      {TOPICS.length > 0 && (
+        <section aria-labelledby="topics-title">
+          <h2 id="topics-title" className="text-2xl font-extrabold">
+            {E.topicsTitle}
+          </h2>
+          <p className="mt-1 text-muted-foreground">{E.topicsSubtitle}</p>
+          <ul className="mt-5 grid gap-3 md:grid-cols-2">
+            {TOPICS.map((topic) => (
+              <li key={topic.id}>
+                <Link
+                  to={`/app/education/topics/${topic.id}`}
+                  className="group flex h-full flex-col gap-2 rounded-2xl border bg-primary/5 p-5 transition-shadow hover:shadow-md"
+                >
+                  <Sparkles className="size-5 text-primary" aria-hidden="true" />
+                  <span className="font-display text-lg font-bold">{topic.title}</span>
+                  <span className="text-sm text-muted-foreground">{topic.summary}</span>
+                  <span className="mt-auto inline-flex items-center gap-1 pt-2 text-sm font-semibold text-primary">
+                    {E.readTopic} <ArrowRight className="size-4" aria-hidden="true" />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 
@@ -158,6 +184,115 @@ export function AreaGuidePage() {
           <Prose html={s.html} className="mt-3" />
         </section>
       ))}
+    </article>
+  );
+}
+
+export function TopicPage() {
+  const t = useT();
+  const E = t.education;
+  const { topicId = "" } = useParams();
+  const topic = getTopic(topicId);
+
+  if (!topic) {
+    return (
+      <div className="mx-auto max-w-3xl">
+        <p className="rounded-2xl border border-dashed p-6 text-muted-foreground">{t.notFound.body}</p>
+        <Button asChild variant="outline" className="mt-4">
+          <Link to="/app/education">
+            <ArrowLeft /> {E.areaBack}
+          </Link>
+        </Button>
+      </div>
+    );
+  }
+
+  // Courses go right after the first section ("why it matters"), before the practical advice.
+  const [intro, ...rest] = topic.sections;
+
+  return (
+    <article className="mx-auto flex max-w-3xl flex-col gap-6">
+      <div>
+        <Link to="/app/education" className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
+          <ArrowLeft className="size-4" aria-hidden="true" /> {E.areaBack}
+        </Link>
+        <p className="mt-4 text-sm font-semibold uppercase tracking-wider text-primary">{E.eyebrow}</p>
+        <h1 className="mt-2 text-3xl font-extrabold sm:text-4xl">{topic.title}</h1>
+        <p className="mt-2 text-lg text-muted-foreground">{topic.summary}</p>
+      </div>
+      {intro && (
+        <section className="rounded-2xl border bg-card p-5 sm:p-6">
+          <h2 className="text-lg font-bold">{intro.heading}</h2>
+          <Prose html={intro.html} className="mt-3" />
+        </section>
+      )}
+      {topic.courses.length > 0 && (
+        <section aria-labelledby="courses-title">
+          <h2 id="courses-title" className="text-xl font-extrabold">
+            {E.coursesTitle}
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">{E.coursesSubtitle}</p>
+          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+            {topic.courses.map((c) => (
+              <li key={c.url} className="flex flex-col gap-2 rounded-2xl border bg-card p-5">
+                <GraduationCap className="size-5 text-primary" aria-hidden="true" />
+                <p className="font-semibold">{c.name}</p>
+                <p className="text-sm text-muted-foreground">{c.provider}</p>
+                {c.why && <p className="text-sm">{c.why}</p>}
+                <dl className="mt-1 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-xs">
+                  {c.level && (
+                    <>
+                      <dt className="font-semibold text-muted-foreground">{E.courseLevel}</dt>
+                      <dd>{c.level}</dd>
+                    </>
+                  )}
+                  {c.cost && (
+                    <>
+                      <dt className="font-semibold text-muted-foreground">{E.courseCost}</dt>
+                      <dd>{c.cost}</dd>
+                    </>
+                  )}
+                  {c.language && (
+                    <>
+                      <dt className="font-semibold text-muted-foreground">{E.courseLanguage}</dt>
+                      <dd>{c.language}</dd>
+                    </>
+                  )}
+                </dl>
+                <a
+                  href={c.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto inline-flex items-center gap-1 pt-2 text-sm font-semibold text-primary"
+                >
+                  {E.courseOpen} <ExternalLink className="size-3.5" aria-hidden="true" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+      {rest.map((s) => (
+        <section key={s.heading} className="rounded-2xl border bg-card p-5 sm:p-6">
+          <h2 className="text-lg font-bold">{s.heading}</h2>
+          <Prose html={s.html} className="mt-3" />
+        </section>
+      ))}
+      {topic.sources.length > 0 && (
+        <footer className="border-t pt-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t.common.sources}</p>
+          <ul className="mt-1 flex flex-col gap-1 text-sm">
+            {topic.sources.map((s) => (
+              <li key={s.url}>
+                <a href={s.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-primary underline underline-offset-3">
+                  {s.label} <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />
+                </a>
+              </li>
+            ))}
+          </ul>
+          {topic.reviewed && <p className="mt-2 text-xs text-muted-foreground">{fmt(t.legal.reviewed, { date: formatDay(topic.reviewed, t.locale) })}</p>}
+        </footer>
+      )}
     </article>
   );
 }

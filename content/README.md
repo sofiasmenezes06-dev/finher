@@ -18,6 +18,7 @@ Arquivos que começam com `_` são modelos e não aparecem no site.
 | `navigator/` | Situações do Navegador de desafios (Trajetórias) |
 | `family/` | Fases do guia Carreira e família (Trajetórias) |
 | `stories/` | Histórias reais de entrevistas e histórias ilustrativas (Trajetórias) |
+| `topics/` | Temas em destaque do pilar Educação, com cursos indicados e fontes (Educação) |
 | `legal/` | Onde buscar ajuda, um arquivo por país |
 
 ## Regras para todos os arquivos
@@ -91,3 +92,20 @@ Cabeçalho: `id`, `name`, `reviewed` e `sources` (lista com `label` e `url`). S�
 
 - **Entrevistas reais:** copie `stories/_modelo-entrevista.md`. Só aparecem no site com `consent: true`.
 - **Histórias ilustrativas:** `kind: composite` ou `kind: illustrative`. O site mostra que não são pessoas reais.
+
+## Tema em destaque (`topics/*.md`)
+
+Cabeçalho: `id`, `order`, `title`, `summary`, `reviewed` (data da última conferência dos links), `sources` (lista com `label` e `url`, igual às empresas) e `courses`, uma lista de cursos:
+
+```
+courses:
+  - name: Nome do curso
+    provider: Quem oferece
+    url: https://link-oficial-do-curso
+    level: Iniciante
+    cost: Gratuito
+    language: Português
+    why: "Uma ou duas frases sobre por que indicamos."
+```
+
+Só indique cursos com link oficial, conferido por alguém da equipe. Os cursos aparecem logo depois da primeira seção do corpo. O corpo usa `## Seções`, como os guias de área. Relatos de profissionais só entram com consentimento por escrito, como nas histórias.
