@@ -1,11 +1,12 @@
 import { Suspense, lazy, useEffect, type ComponentType, type ReactNode } from "react";
-import { BrowserRouter, Link, MemoryRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Link, MemoryRouter, Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
 import { DemoBanner, DisclaimerBar } from "@/components/layout/disclaimer-bar";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/i18n";
 import { isOnboarded } from "@/lib/domain";
+import { paths } from "@/lib/routes";
 import Landing from "@/pages/landing";
 
 // Every page but the landing page loads on demand, so the first visit only downloads what it shows.
@@ -22,8 +23,8 @@ const AreaGuidePage = named(() => import("@/pages/education"), "AreaGuidePage");
 const TopicPage = named(() => import("@/pages/education"), "TopicPage");
 const FamilyPage = named(() => import("@/pages/family"), "FamilyPage");
 const FamilyPhasePage = named(() => import("@/pages/family"), "FamilyPhasePage");
-const JourneysPage = named(() => import("@/pages/journeys"), "JourneysPage");
-const StoryPage = named(() => import("@/pages/journeys"), "StoryPage");
+const StoriesPage = named(() => import("@/pages/stories"), "StoriesPage");
+const StoryPage = named(() => import("@/pages/stories"), "StoryPage");
 const NavigatorPage = named(() => import("@/pages/navigator"), "NavigatorPage");
 const PlaybookPage = named(() => import("@/pages/navigator"), "PlaybookPage");
 import { AuthProvider, useAuth } from "@/providers/auth";
@@ -81,6 +82,11 @@ function NotFound() {
   );
 }
 
+/** Old addresses (before the navigation was reorganised) keep working. */
+function LegacyRedirect({ to }: { to: (p: Record<string, string | undefined>) => string }) {
+  return <Navigate to={to(useParams())} replace />;
+}
+
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -110,16 +116,25 @@ function Chrome() {
           <Route path="/onboarding" element={<RequireAuth><Onboarding /></RequireAuth>} />
           <Route path="/app" element={<RequireAuth><RequireOnboarding><AppShell /></RequireOnboarding></RequireAuth>}>
             <Route index element={<OverviewRoute />} />
-            <Route path="education" element={<EducationPage />} />
-            <Route path="education/areas/:areaId" element={<AreaGuidePage />} />
-            <Route path="education/topics/:topicId" element={<TopicPage />} />
+            <Route path="learn" element={<EducationPage />} />
+            <Route path="learn/areas/:areaId" element={<AreaGuidePage />} />
+            <Route path="learn/topics/:topicId" element={<TopicPage />} />
+            <Route path="challenges" element={<NavigatorPage />} />
+            <Route path="challenges/:playbookId/:savedId?" element={<PlaybookPage />} />
+            <Route path="family" element={<FamilyPage />} />
+            <Route path="family/:phaseId" element={<FamilyPhasePage />} />
+            <Route path="stories" element={<StoriesPage />} />
+            <Route path="stories/:storyId" element={<StoryPage />} />
             <Route path="community" element={<CommunityPage />} />
-            <Route path="journeys" element={<JourneysPage />} />
-            <Route path="journeys/stories/:storyId" element={<StoryPage />} />
-            <Route path="journeys/challenges" element={<NavigatorPage />} />
-            <Route path="journeys/challenges/:playbookId/:savedId?" element={<PlaybookPage />} />
-            <Route path="journeys/family" element={<FamilyPage />} />
-            <Route path="journeys/family/:phaseId" element={<FamilyPhasePage />} />
+            <Route path="education" element={<Navigate to={paths.learn} replace />} />
+            <Route path="education/areas/:id" element={<LegacyRedirect to={(p) => paths.area(p.id!)} />} />
+            <Route path="education/topics/:id" element={<LegacyRedirect to={(p) => paths.topic(p.id!)} />} />
+            <Route path="journeys" element={<Navigate to={paths.stories} replace />} />
+            <Route path="journeys/stories/:id" element={<LegacyRedirect to={(p) => paths.story(p.id!)} />} />
+            <Route path="journeys/challenges" element={<Navigate to={paths.challenges} replace />} />
+            <Route path="journeys/challenges/:id/:savedId?" element={<LegacyRedirect to={(p) => paths.playbook(p.id!, p.savedId)} />} />
+            <Route path="journeys/family" element={<Navigate to={paths.family} replace />} />
+            <Route path="journeys/family/:id" element={<LegacyRedirect to={(p) => paths.phase(p.id!)} />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />

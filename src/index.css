@@ -143,6 +143,15 @@
 :root.dark {
   color-scheme: dark;
 }
+/* The app's phone tab bar sits at the very bottom; the disclaimer rides just above it. */
+:root.has-tabbar {
+  --tabbar-offset: calc(4rem + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 64rem) {
+  :root.has-tabbar {
+    --tabbar-offset: 0px;
+  }
+}
 body {
   margin: 0;
   background: var(--background);

@@ -11,6 +11,7 @@ import { fmt, useT } from "@/i18n";
 import { backend } from "@/lib/backend";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth";
+import { paths } from "@/lib/routes";
 
 /** Checklist progress for the signed-in user, with optimistic toggling. */
 function useChecklist() {
@@ -53,7 +54,7 @@ function StoryCard({ story }: { story: Story }) {
       </Badge>
       <h3 className="mt-3 text-lg font-bold">{story.title}</h3>
       {real ? (
-        <Link to={`/app/journeys/stories/${story.id}`} className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary">
+        <Link to={paths.story(story.id)} className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary">
           {t.journeys.open} <ArrowRight className="size-4" aria-hidden="true" />
         </Link>
       ) : (
@@ -87,7 +88,7 @@ export function FamilyPage() {
           return (
             <li key={p.id}>
               <Link
-                to={`/app/journeys/family/${p.id}`}
+                to={paths.phase(p.id)}
                 className="group flex items-center gap-4 rounded-2xl border bg-card p-5 transition-shadow hover:shadow-lg sm:gap-6"
               >
                 <span
@@ -153,7 +154,7 @@ export function FamilyPhasePage() {
       <div className="mx-auto max-w-3xl">
         <p className="rounded-2xl border border-dashed p-6 text-muted-foreground">{t.notFound.body}</p>
         <Button asChild variant="outline" className="mt-4">
-          <Link to="/app/journeys/family">
+          <Link to={paths.family}>
             <ArrowLeft /> {F.allPhases}
           </Link>
         </Button>
@@ -171,7 +172,7 @@ export function FamilyPhasePage() {
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-8">
       <div>
-        <Link to="/app/journeys/family" className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
+        <Link to={paths.family} className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
           <ArrowLeft className="size-4" aria-hidden="true" /> {F.allPhases}
         </Link>
         <p className="mt-4 text-sm font-semibold uppercase tracking-wider text-primary">
@@ -247,7 +248,7 @@ export function FamilyPhasePage() {
       <nav className="flex flex-col gap-3 sm:flex-row sm:justify-between" aria-label={F.allPhases}>
         {prev ? (
           <Button asChild variant="outline">
-            <Link to={`/app/journeys/family/${prev.id}`}>
+            <Link to={paths.phase(prev.id)}>
               <ArrowLeft /> {fmt(F.previous, { title: prev.title })}
             </Link>
           </Button>
@@ -256,7 +257,7 @@ export function FamilyPhasePage() {
         )}
         {next && (
           <Button asChild>
-            <Link to={`/app/journeys/family/${next.id}`}>
+            <Link to={paths.phase(next.id)}>
               {fmt(F.next, { title: next.title })} <ArrowRight />
             </Link>
           </Button>

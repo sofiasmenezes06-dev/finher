@@ -1,0 +1,15 @@
+/** Every in-app path in one place, so the navigation can change without hunting for links. */
+export const paths = {
+  home: "/app",
+  learn: "/app/learn",
+  area: (id: string) => `/app/learn/areas/${id}`,
+  topic: (id: string) => `/app/learn/topics/${id}`,
+  challenges: "/app/challenges",
+  playbook: (id: string, savedId?: string) => `/app/challenges/${id}${savedId ? `/${savedId}` : ""}`,
+  family: "/app/family",
+  phase: (id: string) => `/app/family/${id}`,
+  stories: "/app/stories",
+  story: (id: string) => `/app/stories/${id}`,
+  community: "/app/community",
+  settings: "/app/settings",
+} as const;

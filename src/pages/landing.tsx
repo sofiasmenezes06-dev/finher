@@ -5,6 +5,7 @@ import {
   BookOpen,
   Compass,
   EyeOff,
+  Flag,
   HeartHandshake,
   Lock,
   MapPin,
@@ -22,10 +23,10 @@ import { Button } from "@/components/ui/button";
 import { fmt, useT } from "@/i18n";
 
 const PILLAR_ICONS: Record<string, LucideIcon> = {
-  overview: Compass,
-  education: BookOpen,
-  community: Users,
-  journeys: Route,
+  learn: BookOpen,
+  challenges: Flag,
+  family: HeartHandshake,
+  stories: Quote,
 };
 const EDGE_ICONS: Record<string, LucideIcon> = {
   navigator: Route,

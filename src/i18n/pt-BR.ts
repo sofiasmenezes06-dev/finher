@@ -104,27 +104,27 @@ export const ptBR = {
     },
     pillars: {
       eyebrow: "O que você encontra",
-      title: "Quatro espaços, um caminho",
+      title: "Quatro portas, um caminho",
       items: [
         {
-          id: "overview",
-          title: "Visão geral",
-          body: "Entenda como o mercado funciona, conheça suas principais áreas e receba recomendações feitas para o seu momento.",
+          id: "learn",
+          title: "Aprender",
+          body: "Trilhas feitas para o seu momento, guias de cada área do mercado e preparação para processos seletivos.",
         },
         {
-          id: "education",
-          title: "Educação",
-          body: "Trilhas, guias por área, preparação para processos seletivos e indicações de cursos, certificações, livros e podcasts.",
+          id: "challenges",
+          title: "Desafios",
+          body: "Interrompida em reunião, preterida, negociando salário? Um plano prático, com frases prontas, para cada situação.",
         },
         {
-          id: "community",
-          title: "Comunidade",
-          body: "Perguntas e respostas, grupos por interesse e momento de carreira, e conexão com mulheres que já atuam no mercado.",
+          id: "family",
+          title: "Carreira e família",
+          body: "Planejamento, gravidez no trabalho, licença e retorno, com informações gerais sobre seus direitos.",
         },
         {
-          id: "journeys",
-          title: "Trajetórias",
-          body: "Histórias reais de mulheres no mercado e guias práticos para os desafios que aparecem pelo caminho.",
+          id: "stories",
+          title: "Histórias",
+          body: "Mulheres do mercado contam como entraram, o que enfrentaram e o que aprenderam.",
         },
       ],
     },
@@ -340,7 +340,7 @@ export const ptBR = {
   },
 
   overview: {
-    eyebrow: "Visão geral",
+    eyebrow: "Meu caminho",
     greeting: "{name}, este é o seu caminho.",
     greetingNoName: "Este é o seu caminho.",
     stageLine: "Seu momento: {stage}",
@@ -390,7 +390,7 @@ export const ptBR = {
   },
 
   education: {
-    eyebrow: "Educação",
+    eyebrow: "Aprender",
     title: "Aprenda no seu ritmo",
     subtitle: "Trilhas curtas, guias por área e preparação para processos seletivos, organizados a partir do seu momento.",
     trailsTitle: "Trilhas recomendadas para você",
@@ -447,9 +447,9 @@ export const ptBR = {
   },
 
   journeys: {
-    eyebrow: "Trajetórias",
-    title: "Caminhos reais, desafios reais",
-    subtitle: "Histórias de mulheres no mercado financeiro e guias práticos para o que aparece pelo caminho.",
+    eyebrow: "Histórias",
+    title: "Quem já chegou lá conta como foi",
+    subtitle: "Entrevistas com mulheres do mercado financeiro: como entraram, o que enfrentaram e o que aprenderam.",
     storiesTitle: "Histórias de mulheres no mercado",
     storiesEmpty:
       "As primeiras histórias estão sendo coletadas pela nossa equipe em entrevistas com mulheres do mercado, sempre com consentimento por escrito. Em breve, aqui.",
@@ -463,7 +463,7 @@ export const ptBR = {
     },
     interview: "Entrevista",
     interviewedOn: "Entrevista realizada em {date}",
-    storyBack: "Todas as trajetórias",
+    storyBack: "Todas as histórias",
     filterStage: "Momento",
     filterArea: "Área",
     all: "Todos",
@@ -484,11 +484,34 @@ export const ptBR = {
 
   app: {
     nav: {
-      overview: "Visão geral",
-      education: "Educação",
+      overview: "Meu caminho",
+      education: "Aprender",
+      challenges: "Desafios",
+      family: "Carreira e família",
+      stories: "Histórias",
       community: "Comunidade",
-      journeys: "Trajetórias",
       settings: "Configurações",
+      more: "Mais",
+      explore: "Explorar",
+      connect: "Conectar",
+      soon: "Em breve",
+      account: "Conta e configurações",
+      tabsLabel: "Atalhos",
+    },
+    search: {
+      open: "Buscar",
+      placeholder: "Buscar guias, desafios, histórias…",
+      label: "Buscar no FinHer",
+      empty: "Nada encontrado para “{q}”.",
+      hint: "Digite para buscar em todo o conteúdo.",
+      close: "Fechar busca",
+      kinds: {
+        area: "Guia de área",
+        topic: "Tema",
+        playbook: "Desafio",
+        phase: "Carreira e família",
+        story: "História",
+      },
     },
     userMenu: "Menu da conta",
   },
@@ -515,7 +538,7 @@ export const ptBR = {
   },
 
   navigator: {
-    eyebrow: "Navegador de desafios",
+    eyebrow: "Desafios",
     title: "Transforme um momento difícil no trabalho em um plano",
     subtitle:
       "Escolha a situação mais parecida com a sua e responda poucas perguntas. Você recebe um diagnóstico, estratégias com prós e contras, frases prontas e um jeito de transformar isso em vantagem.",
@@ -526,7 +549,7 @@ export const ptBR = {
     inProgress: "Em andamento",
     updated: "Atualizada em {date}",
     start: "Começar",
-    back: "Trajetórias",
+    back: "Todos os desafios",
     questionsTitle: "Conte um pouco mais",
     questionsHint: "Poucas perguntas rápidas. Suas respostas definem o diagnóstico e qual estratégia aparece primeiro.",
     answerAll: "Responda todas as perguntas para ver seu plano.",

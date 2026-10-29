@@ -10,23 +10,24 @@ import { AREA_GUIDES, getAreaGuide, getPlaybook, INSTITUTIONS } from "@/content/
 import { fmt, formatDay, useT, type Messages } from "@/i18n";
 import type { OnboardingAnswers, Profile } from "@/lib/domain";
 import { buildRecommendations, type NextStep } from "@/lib/path-engine";
+import { paths } from "@/lib/routes";
 
 function stepLink(s: NextStep): string {
   switch (s.key) {
     case "trail":
-      return "/app/education";
+      return paths.learn;
     case "areaGuide":
-      return `/app/education/areas/${s.area}`;
+      return paths.area(s.area);
     case "playbook":
-      return `/app/journeys/challenges/${s.id}`;
+      return paths.playbook(s.id);
     case "family":
-      return "/app/journeys/family";
+      return paths.family;
     case "community":
-      return "/app/community";
+      return paths.community;
     case "stories":
-      return "/app/journeys";
+      return paths.stories;
     default:
-      return "/app/settings";
+      return paths.settings;
   }
 }
 
@@ -122,7 +123,7 @@ export default function OverviewPage({ profile }: { profile: Profile & Onboardin
           <ul className="flex flex-col gap-3">
             {rec.journeys.map((j) => {
               const pb = j.kind === "playbook" ? getPlaybook(j.id) : null;
-              const to = j.kind === "family" ? "/app/journeys/family" : `/app/journeys/challenges/${j.id}`;
+              const to = j.kind === "family" ? paths.family : paths.playbook(j.id);
               const Icon = j.kind === "family" ? HeartHandshake : Route;
               return (
                 <li key={j.kind === "family" ? "family" : j.id}>
@@ -155,7 +156,7 @@ export default function OverviewPage({ profile }: { profile: Profile & Onboardin
             return (
               <li key={a.id}>
                 <Link
-                  to={`/app/education/areas/${a.id}`}
+                  to={paths.area(a.id)}
                   className="group flex h-full flex-col gap-2 rounded-2xl border bg-card p-5 transition-shadow hover:shadow-md"
                 >
                   <span className="flex items-center justify-between gap-2">
