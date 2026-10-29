@@ -9,8 +9,11 @@ import {
   CircleCheck,
   Loader2,
   MessageSquareQuote,
+  MessagesSquare,
   Mic,
   Network,
+  ShieldQuestion,
+  Shirt,
   Sparkles,
   Trash2,
   TrendingUp,
@@ -28,6 +31,7 @@ import { backend } from "@/lib/backend";
 import type { SavedSituation } from "@/lib/domain";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth";
+import { paths } from "@/lib/routes";
 
 const AREA_ICONS: Record<string, LucideIcon> = {
   voice: Mic,
@@ -36,6 +40,8 @@ const AREA_ICONS: Record<string, LucideIcon> = {
   advancement: TrendingUp,
   network: Network,
 };
+
+const COMING_ICONS: LucideIcon[] = [MessagesSquare, ShieldQuestion, Shirt];
 
 const formatDate = (iso: string, locale: string) =>
   new Date(iso).toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" });
@@ -87,7 +93,7 @@ export function NavigatorPage() {
             return (
               <li key={p.id}>
                 <Link
-                  to={`/app/journeys/challenges/${p.id}`}
+                  to={paths.playbook(p.id)}
                   className="group flex h-full gap-4 rounded-2xl border bg-card p-5 transition-shadow hover:shadow-lg"
                 >
                   <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
@@ -127,7 +133,7 @@ export function NavigatorPage() {
               const p = getPlaybook(s.playbookId);
               return (
                 <li key={s.id}>
-                  <Link to={`/app/journeys/challenges/${s.playbookId}/${s.id}`} className="flex items-center gap-4 p-4 hover:bg-accent/50 sm:px-5">
+                  <Link to={paths.playbook(s.playbookId, s.id)} className="flex items-center gap-4 p-4 hover:bg-accent/50 sm:px-5">
                     <span className="flex min-w-0 flex-1 flex-col gap-1">
                       <span className="font-semibold">{p?.title ?? s.playbookId}</span>
                       {s.note && <span className="truncate text-sm text-muted-foreground">{s.note}</span>}
@@ -141,6 +147,24 @@ export function NavigatorPage() {
             })}
           </ul>
         )}
+      </section>
+
+      <section aria-labelledby="coming-guides">
+        <h2 id="coming-guides" className="text-xl font-extrabold">
+          {t.journeys.comingTitle}
+        </h2>
+        <ul className="mt-4 grid gap-3 md:grid-cols-3">
+          {t.journeys.coming.map((c, i) => {
+            const Icon = COMING_ICONS[i] ?? MessagesSquare;
+            return (
+              <li key={c.title} className="flex flex-col gap-2 rounded-2xl border border-dashed p-5">
+                <Icon className="size-5 text-primary" aria-hidden="true" />
+                <p className="font-semibold">{c.title}</p>
+                <p className="text-sm text-muted-foreground">{c.body}</p>
+              </li>
+            );
+          })}
+        </ul>
       </section>
     </div>
   );
@@ -350,7 +374,7 @@ function SavePanel({
       const isNew = !existing;
       onSaved(s);
       setMessage(N.savedToast);
-      if (isNew) navigate(`/app/journeys/challenges/${playbook.id}/${s.id}`, { replace: true });
+      if (isNew) navigate(paths.playbook(playbook.id, s.id), { replace: true });
     } catch {
       setError(t.auth.errors.generic);
     } finally {
@@ -363,7 +387,7 @@ function SavePanel({
     setBusy(true);
     try {
       await backend.deleteSituation(user.id, existing.id);
-      navigate("/app/journeys/challenges", { replace: true });
+      navigate(paths.challenges, { replace: true });
     } catch {
       setError(t.auth.errors.generic);
       setBusy(false);
@@ -465,7 +489,7 @@ export function PlaybookPage() {
       <div className="mx-auto max-w-3xl">
         <p className="rounded-2xl border border-dashed p-6 text-muted-foreground">{N.notFound}</p>
         <Button asChild variant="outline" className="mt-4">
-          <Link to="/app/journeys/challenges">
+          <Link to={paths.challenges}>
             <ArrowLeft /> {N.back}
           </Link>
         </Button>
@@ -476,7 +500,7 @@ export function PlaybookPage() {
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-8">
       <div>
-        <Link to="/app/journeys/challenges" className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
+        <Link to={paths.challenges} className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
           <ArrowLeft className="size-4" aria-hidden="true" /> {N.back}
         </Link>
         <div className="mt-4 flex flex-wrap items-center gap-3">

@@ -10,6 +10,7 @@ import { fmt, formatDay, useT, type Messages } from "@/i18n";
 import { isOnboarded } from "@/lib/domain";
 import { buildRecommendations, type TrailReason } from "@/lib/path-engine";
 import { useAuth } from "@/providers/auth";
+import { paths } from "@/lib/routes";
 
 const COMING_ICONS = [BookMarked, ListChecks, Bot];
 
@@ -90,7 +91,7 @@ export function EducationPage() {
             {TOPICS.map((topic) => (
               <li key={topic.id}>
                 <Link
-                  to={`/app/education/topics/${topic.id}`}
+                  to={paths.topic(topic.id)}
                   className="group flex h-full flex-col gap-2 rounded-2xl border bg-primary/5 p-5 transition-shadow hover:shadow-md"
                 >
                   <Sparkles className="size-5 text-primary" aria-hidden="true" />
@@ -115,7 +116,7 @@ export function EducationPage() {
           {AREA_GUIDES.map((a) => (
             <li key={a.id}>
               <Link
-                to={`/app/education/areas/${a.id}`}
+                to={paths.area(a.id)}
                 className="group flex h-full flex-col gap-2 rounded-2xl border bg-card p-5 transition-shadow hover:shadow-md"
               >
                 <span className="font-display text-lg font-bold">{a.title}</span>
@@ -160,7 +161,7 @@ export function AreaGuidePage() {
       <div className="mx-auto max-w-3xl">
         <p className="rounded-2xl border border-dashed p-6 text-muted-foreground">{t.notFound.body}</p>
         <Button asChild variant="outline" className="mt-4">
-          <Link to="/app/education">
+          <Link to={paths.learn}>
             <ArrowLeft /> {t.education.areaBack}
           </Link>
         </Button>
@@ -171,7 +172,7 @@ export function AreaGuidePage() {
   return (
     <article className="mx-auto flex max-w-3xl flex-col gap-6">
       <div>
-        <Link to="/app/education" className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
+        <Link to={paths.learn} className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
           <ArrowLeft className="size-4" aria-hidden="true" /> {t.education.areaBack}
         </Link>
         <p className="mt-4 text-sm font-semibold uppercase tracking-wider text-primary">{t.education.eyebrow}</p>
@@ -199,7 +200,7 @@ export function TopicPage() {
       <div className="mx-auto max-w-3xl">
         <p className="rounded-2xl border border-dashed p-6 text-muted-foreground">{t.notFound.body}</p>
         <Button asChild variant="outline" className="mt-4">
-          <Link to="/app/education">
+          <Link to={paths.learn}>
             <ArrowLeft /> {E.areaBack}
           </Link>
         </Button>
@@ -213,7 +214,7 @@ export function TopicPage() {
   return (
     <article className="mx-auto flex max-w-3xl flex-col gap-6">
       <div>
-        <Link to="/app/education" className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
+        <Link to={paths.learn} className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
           <ArrowLeft className="size-4" aria-hidden="true" /> {E.areaBack}
         </Link>
         <p className="mt-4 text-sm font-semibold uppercase tracking-wider text-primary">{E.eyebrow}</p>
