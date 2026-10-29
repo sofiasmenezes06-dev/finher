@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from "react";
+import { Suspense, lazy, useEffect, type ComponentType, type ReactNode } from "react";
 import { BrowserRouter, Link, MemoryRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
@@ -7,15 +7,25 @@ import { Button } from "@/components/ui/button";
 import { useT } from "@/i18n";
 import { isOnboarded } from "@/lib/domain";
 import Landing from "@/pages/landing";
-import { LoginPage, SignupPage } from "@/pages/auth";
-import Onboarding from "@/pages/onboarding";
-import OverviewPage from "@/pages/overview";
-import SettingsPage from "@/pages/settings";
-import CommunityPage from "@/pages/community";
-import { AreaGuidePage, EducationPage } from "@/pages/education";
-import { FamilyPage, FamilyPhasePage } from "@/pages/family";
-import { JourneysPage, StoryPage } from "@/pages/journeys";
-import { NavigatorPage, PlaybookPage } from "@/pages/navigator";
+
+// Every page but the landing page loads on demand, so the first visit only downloads what it shows.
+const named = <K extends string>(load: () => Promise<Record<K, ComponentType<any>>>, name: K) =>
+  lazy(() => load().then((m) => ({ default: m[name] })));
+const LoginPage = named(() => import("@/pages/auth"), "LoginPage");
+const SignupPage = named(() => import("@/pages/auth"), "SignupPage");
+const Onboarding = lazy(() => import("@/pages/onboarding"));
+const OverviewPage = lazy(() => import("@/pages/overview"));
+const SettingsPage = lazy(() => import("@/pages/settings"));
+const CommunityPage = lazy(() => import("@/pages/community"));
+const EducationPage = named(() => import("@/pages/education"), "EducationPage");
+const AreaGuidePage = named(() => import("@/pages/education"), "AreaGuidePage");
+const TopicPage = named(() => import("@/pages/education"), "TopicPage");
+const FamilyPage = named(() => import("@/pages/family"), "FamilyPage");
+const FamilyPhasePage = named(() => import("@/pages/family"), "FamilyPhasePage");
+const JourneysPage = named(() => import("@/pages/journeys"), "JourneysPage");
+const StoryPage = named(() => import("@/pages/journeys"), "StoryPage");
+const NavigatorPage = named(() => import("@/pages/navigator"), "NavigatorPage");
+const PlaybookPage = named(() => import("@/pages/navigator"), "PlaybookPage");
 import { AuthProvider, useAuth } from "@/providers/auth";
 import { ThemeProvider } from "@/providers/theme";
 
@@ -92,26 +102,29 @@ function Chrome() {
         {t.common.skipToContent}
       </a>
       {mode === "demo" && <DemoBanner />}
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/signup" element={<GuestOnly><SignupPage /></GuestOnly>} />
-        <Route path="/login" element={<GuestOnly><LoginPage /></GuestOnly>} />
-        <Route path="/onboarding" element={<RequireAuth><Onboarding /></RequireAuth>} />
-        <Route path="/app" element={<RequireAuth><RequireOnboarding><AppShell /></RequireOnboarding></RequireAuth>}>
-          <Route index element={<OverviewRoute />} />
-          <Route path="education" element={<EducationPage />} />
-          <Route path="education/areas/:areaId" element={<AreaGuidePage />} />
-          <Route path="community" element={<CommunityPage />} />
-          <Route path="journeys" element={<JourneysPage />} />
-          <Route path="journeys/stories/:storyId" element={<StoryPage />} />
-          <Route path="journeys/challenges" element={<NavigatorPage />} />
-          <Route path="journeys/challenges/:playbookId/:savedId?" element={<PlaybookPage />} />
-          <Route path="journeys/family" element={<FamilyPage />} />
-          <Route path="journeys/family/:phaseId" element={<FamilyPhasePage />} />
-          <Route path="settings" element={<SettingsPage />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Suspense fallback={<FullPageLoader />}>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/signup" element={<GuestOnly><SignupPage /></GuestOnly>} />
+          <Route path="/login" element={<GuestOnly><LoginPage /></GuestOnly>} />
+          <Route path="/onboarding" element={<RequireAuth><Onboarding /></RequireAuth>} />
+          <Route path="/app" element={<RequireAuth><RequireOnboarding><AppShell /></RequireOnboarding></RequireAuth>}>
+            <Route index element={<OverviewRoute />} />
+            <Route path="education" element={<EducationPage />} />
+            <Route path="education/areas/:areaId" element={<AreaGuidePage />} />
+            <Route path="education/topics/:topicId" element={<TopicPage />} />
+            <Route path="community" element={<CommunityPage />} />
+            <Route path="journeys" element={<JourneysPage />} />
+            <Route path="journeys/stories/:storyId" element={<StoryPage />} />
+            <Route path="journeys/challenges" element={<NavigatorPage />} />
+            <Route path="journeys/challenges/:playbookId/:savedId?" element={<PlaybookPage />} />
+            <Route path="journeys/family" element={<FamilyPage />} />
+            <Route path="journeys/family/:phaseId" element={<FamilyPhasePage />} />
+            <Route path="settings" element={<SettingsPage />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
       <DisclaimerBar />
     </>
   );
