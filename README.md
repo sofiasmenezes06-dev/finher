@@ -18,6 +18,15 @@ Sem as chaves do Supabase, o app roda em **modo de demonstração**: contas e re
 1. Crie um projeto e rode os arquivos de `supabase/migrations/` em ordem (editor SQL ou `supabase db push`).
 2. Copie `.env.example` para `.env.local` e preencha `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY`.
 
+## Publicar na Vercel
+
+O repositório já vem configurado para **um único projeto** na Vercel (`vercel.json`): instala com `npm ci`, publica com `npm run build` e serve a pasta `dist`. Qualquer endereço (como `/app/education`) abre o app, para os links diretos funcionarem.
+
+1. Na Vercel, clique em **Add New → Project** e importe o repositório `finher`.
+2. Deixe as configurações como vierem (a Vercel lê o `vercel.json`).
+3. Opcional: em **Environment Variables**, adicione `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY`. Sem elas, o site fica no modo de demonstração.
+4. Clique em **Deploy**. Cada push no `main` publica de novo no mesmo projeto.
+
 ## Estrutura
 
 | Caminho | O que é |
