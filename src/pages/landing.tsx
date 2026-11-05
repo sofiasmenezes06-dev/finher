@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { Button } from "@/components/ui/button";
 import { fmt, useT } from "@/i18n";
 import { cn } from "@/lib/utils";
+import { survey, surveyPercent, type SurveyChallenge, type SurveyWant } from "@/content/survey";
 
 const SAFETY_ICONS: LucideIcon[] = [Wallet, Lock, EyeOff, ShieldCheck];
 
@@ -62,6 +63,68 @@ function PathPreview() {
           <span className="font-semibold">{P.communityValue}</span>
         </p>
     </div>
+  );
+}
+
+/** Real numbers from the Galapagos por Elas survey: three headline stats, then what would help. */
+function SurveySection() {
+  const t = useT();
+  const S = t.landing.survey;
+  const vars = { respondents: survey.respondents, institutions: survey.institutions };
+  return (
+    <section id="survey" className="scroll-mt-20" aria-labelledby="survey-title">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:py-24">
+        <div className="max-w-3xl">
+          <Eyebrow>{S.eyebrow}</Eyebrow>
+          <h2 id="survey-title" className="mt-4 text-4xl font-light sm:text-5xl">
+            {S.title}
+          </h2>
+          <p className="mt-5 text-lg text-muted-foreground">{fmt(S.intro, vars)}</p>
+        </div>
+
+        <ul className="mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
+          {S.stats.map((s) => (
+            <li key={s.key} className="border-t pt-6">
+              <p className="tabular font-display text-5xl font-light text-primary sm:text-6xl">
+                {surveyPercent(survey.challenges[s.key as SurveyChallenge])}%
+              </p>
+              <p className="mt-3 text-lg">{s.label}</p>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-16 grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
+          <div>
+            <h3 className="text-2xl font-medium">{S.wantsTitle}</h3>
+            <ul className="mt-6">
+              {S.wants.map((w) => {
+                const pct = surveyPercent(survey.wants[w.key as SurveyWant]);
+                return (
+                  <li key={w.key} className="border-b py-4 first:border-t">
+                    <div className="flex items-baseline justify-between gap-4">
+                      <span className="font-medium">{w.label}</span>
+                      <span className="tabular shrink-0 text-sm font-semibold text-primary">{pct}%</span>
+                    </div>
+                    <div className="mt-2.5 h-1.5 rounded-full bg-muted" aria-hidden="true">
+                      <div className="h-full rounded-full bg-primary" style={{ width: `${pct}%` }} />
+                    </div>
+                    <p className="label-mono mt-2 text-muted-foreground">
+                      {S.doorLabel}: {w.door}
+                    </p>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+          <figure className="self-start rounded-2xl border bg-card p-6 sm:p-8">
+            <blockquote className="font-display text-2xl font-light leading-snug">“{S.quote}”</blockquote>
+            <figcaption className="mt-4 text-sm text-muted-foreground">{S.quoteSource}</figcaption>
+          </figure>
+        </div>
+
+        <p className="mt-10 max-w-3xl text-sm text-muted-foreground">{fmt(S.note, vars)}</p>
+      </div>
+    </section>
   );
 }
 
@@ -184,6 +247,8 @@ export default function Landing() {
             </ul>
           </div>
         </section>
+
+        <SurveySection />
 
         {/* How it works */}
         <section id="how" className="scroll-mt-20" aria-labelledby="how-title">

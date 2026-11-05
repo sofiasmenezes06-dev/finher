@@ -128,6 +128,29 @@ export const ptBR = {
         },
       ],
     },
+    survey: {
+      eyebrow: "O que ouvimos",
+      title: "Perguntamos a universitárias o que pesa.",
+      intro:
+        "Na pesquisa Galapagos por Elas, {respondents} estudantes de {institutions} universidades contaram o que veem no caminho para o mercado financeiro e o que ajudaria. O FinHer foi desenhado a partir dessas respostas.",
+      stats: [
+        { key: "treatment", label: "já percebem tratamento diferente em ambientes profissionais" },
+        { key: "impostor", label: "sentem insegurança ao disputar vagas em áreas muito masculinas" },
+        { key: "motherhood", label: "temem não conseguir conciliar carreira e maternidade" },
+      ],
+      wantsTitle: "O que elas dizem que ajudaria",
+      wants: [
+        { key: "leadership", label: "Mulheres na liderança como referência", door: "Histórias" },
+        { key: "internships", label: "Estágios e trainees voltados a mulheres", door: "Aprender" },
+        { key: "mentoring", label: "Mentoria com lideranças femininas", door: "Comunidade" },
+        { key: "courses", label: "Cursos técnicos: modelagem, valuation, Excel", door: "Aprender" },
+        { key: "networking", label: "Mais oportunidades de networking", door: "Comunidade" },
+      ],
+      doorLabel: "No FinHer",
+      quote: "Embora me sentisse muito preparada e dominando o conteúdo, não me sentia ouvida pelos meus pares.",
+      quoteSource: "Estudante de Economia, respondente da pesquisa",
+      note: "Pesquisa Galapagos por Elas, outubro de 2026. {respondents} respostas de múltipla escolha; as porcentagens não somam 100%. Amostra pequena, sem pretensão estatística.",
+    },
     pillars: {
       eyebrow: "O que você encontra",
       title: "Cinco portas, um caminho",
